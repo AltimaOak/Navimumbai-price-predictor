@@ -77,6 +77,7 @@ export default function Home() {
       // Small artificial delay for "ML feel" UX
       await new Promise(r => setTimeout(r, 600));
 
+      console.log("🚀 Starting prediction...");
       const response = await predictRealEstate({
         location,
         area: areaVal,
@@ -87,7 +88,12 @@ export default function Home() {
       });
       setResult(response);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "The prediction service is currently unavailable. Please check your backend.");
+      console.error("❌ Prediction Error:", err);
+      setError(
+        err instanceof Error 
+          ? `Error: ${err.message}. If the backend is restarting (Render Cold Start), this might take up to 60 seconds. Please try again in a minute.` 
+          : "The prediction service is currently unavailable. Please check your backend."
+      );
     } finally {
       setLoading(false);
     }
