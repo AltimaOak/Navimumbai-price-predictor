@@ -32,3 +32,40 @@ export async function predict(
 
   return response.json();
 }
+
+// Real Estate specific types and functions
+export type RealEstateRequest = {
+  location: "Vashi" | "Nerul" | "Kharghar" | "Panvel";
+  area: number;
+  bhk: number;
+  bathrooms: number;
+  age: number;
+  parking: boolean;
+};
+
+export type RealEstateResponse = {
+  predicted_price: number;
+  price_per_sqft: number;
+  market_status: string;
+};
+
+export async function predictRealEstate(
+  payload: RealEstateRequest
+): Promise<RealEstateResponse> {
+  const response = await fetch("http://localhost:8000/predict/real-estate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(
+      `Real estate prediction failed (${response.status}): ${text || response.statusText}`
+    );
+  }
+
+  return response.json();
+}
