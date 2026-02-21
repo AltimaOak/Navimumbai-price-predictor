@@ -13,20 +13,22 @@ import os
 
 app = FastAPI(title="Prediction API", version="0.1.0")
 
-@app.get("/")
-def root():
-    return {"status": "API is running successfully", "environment": "Production"}
-
-# Read CORS origins from environment variable, default to include your Vercel URL
-origins = os.getenv("ALLOWED_ORIGINS", "https://prediction-frontend-mauve.vercel.app,http://localhost:3000,http://127.0.0.1:3000").split(",")
-
+# 1. FIX FastAPI CORS - Allowing Vercel and *
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[
+        "https://prediction-frontend-mauve.vercel.app",
+        "*"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# 2. VERIFY API ROUTES - Root and Predict
+@app.get("/")
+def root():
+    return {"status": "API is running successfully", "environment": "Production"}
 
 
 @app.get("/health")
