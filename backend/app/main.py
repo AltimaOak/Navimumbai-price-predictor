@@ -9,12 +9,12 @@ from .schemas import (
     RealEstatePredictionResponse,
 )
 
+import os
+
 app = FastAPI(title="Prediction API", version="0.1.0")
 
-origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+# Read CORS origins from environment variable, default to localhost for development
+origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",")
 
 app.add_middleware(
     CORSMiddleware,

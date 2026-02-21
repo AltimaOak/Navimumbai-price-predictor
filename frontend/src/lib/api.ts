@@ -9,10 +9,12 @@ export type PredictionResult = {
   details?: Record<string, unknown>;
 };
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export async function predict(
   payload: PredictionPayload
 ): Promise<PredictionResult> {
-  const response = await fetch("http://localhost:8000/predict", {
+  const response = await fetch(`${API_URL}/predict`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -52,7 +54,7 @@ export type RealEstateResponse = {
 export async function predictRealEstate(
   payload: RealEstateRequest
 ): Promise<RealEstateResponse> {
-  const response = await fetch("http://localhost:8000/predict/real-estate", {
+  const response = await fetch(`${API_URL}/predict/real-estate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
